@@ -89,6 +89,7 @@ int main()
 	size_t i, size;
 	int result;
 	Vector *input;
+	Vector *results;
 	List_Node *root, *head;
 
 	scanf("%u", &size);
@@ -98,19 +99,41 @@ int main()
 		scanf("%d", &input->data[i]);
 	}
 
+	results = Vector_New(8);
+
 	root = get_all_trees(input);
+
+	// foreach (head, root) {
+	// 	Print(head->node);
+	// 	Evaluation_Error = 0;
+	// 	result = Evaluate(head->node);
+	// 	printf("\t [%d]", Evaluation_Error);
+	// 	if (result < 0 || Evaluation_Error != 0)
+	// 	{
+	// 		printf("\t -> NOT VALID\n");
+	// 	} else {
+	// 		printf("\t = %d\n", result);
+	// 	}
+	// }
+
 	foreach (head, root) {
-		Print(head->node);
-		Evaluation_Error = 0;
+		Reset_Error();
 		result = Evaluate(head->node);
-		printf("\t [%d]", Evaluation_Error);
-		if (result < 0 || Evaluation_Error != 0)
+		if (result >= 0 && Get_Error() == 0)
 		{
-			printf("\t -> NOT VALID\n");
-		} else {
-			printf("\t = %d\n", result);
+			Vector_Set(results, result, Vector_Get(results, result) + 1);
 		}
+		// Delete(head->node);
 	}
+	// List_Delete(root);
+
+	i = 0;
+
+	while (Vector_Get(results, i) != 0) {
+		++i;
+	}
+
+	printf("%d\n", i);
 
 	return 0;
 }

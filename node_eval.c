@@ -13,6 +13,7 @@ void (*OperatorNode_Vtable[])() = {
 	&OperatorNode_Print
 };
 
+int Evaluation_Error = 0;
 
 IntNode *IntNode_New(int value) {
 	IntNode *self = malloc(sizeof(*self));
@@ -102,4 +103,12 @@ void OperatorNode_Print(OperatorNode *self) {
 
 void Print(Node *self) {
 	self->vtable[Call_Print](self);
+}
+
+void Reset_Error() {
+	Evaluation_Error = 0;
+}
+
+int Get_Error() {
+	return Evaluation_Error;
 }
