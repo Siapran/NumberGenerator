@@ -3,9 +3,6 @@
 #include "node_eval.h"
 #include "vector.h"
 
-static size_t size = 0;
-static int *input = NULL;
-
 typedef struct List_Node
 {
 	Node *node;
@@ -44,23 +41,12 @@ void List_Add(List_Node **root, List_Node **head, Node *node) {
 
 #define foreach(head, root) for (head = root; head != NULL; head = head->next)
 
-void read_input() {
-	size_t i;
-	scanf("%u", &size);
-	input = malloc(size * sizeof(*input));
-	for (i = 0; i < size; ++i)
-	{
-		scanf("%d", &input[i]);
-	}
-}
-
-
 List_Node *get_all_trees(Vector *values) {
 
 	List_Node
 	*root = NULL, *head = NULL,
 	*leftTree_root, *leftTree_head,
-	*rightTree_root, *rightTree_head,;
+	*rightTree_root, *rightTree_head;
 
 	Node *node;
 	Operator op;
@@ -68,7 +54,7 @@ List_Node *get_all_trees(Vector *values) {
 	size_t index, i, j;
 	Vector leftlist, rightlist;
 
-	if (values.size == 1)
+	if (values->size == 1)
 	{
 		List_Add(&root, &head, IntNode_New(values->data[0]));
 		List_Add(&root, &head, IntNode_New(-values->data[0]));
@@ -79,8 +65,8 @@ List_Node *get_all_trees(Vector *values) {
 		leftlist = Vector_Get_Subvector(values, 0, index);
 		rightlist = Vector_Get_Subvector(values, index, values->size);
 
-		leftTree_root = get_all_trees(leftlist);
-		rightTree_root = get_all_trees(rightlist);
+		leftTree_root = get_all_trees(&leftlist);
+		rightTree_root = get_all_trees(&rightlist);
 
 		foreach (leftTree_head, leftTree_root) {
 			foreach (rightTree_head, rightTree_root) {
@@ -100,6 +86,33 @@ List_Node *get_all_trees(Vector *values) {
 
 int main()
 {
+	size_t i, size;
+	Vector *input;
+	List_Node *root, *head;
+
+	scanf("%u", &size);
+	input = Vector_New(size);
+	for (i = 0; i < input->size; ++i)
+	{
+		scanf("%d", &input->data[i]);
+	}
+
+	root = get_all_trees(input);
+
+	Print(root->node);
+
+	// Node *node = OperatorNode_New(
+	// 	OperatorNode_New(
+	// 		IntNode_New(5),
+	// 		PLUS,
+	// 		IntNode_New(6)),
+	// 	DIVIDE,
+	// 	OperatorNode_New(
+	// 		IntNode_New(7),
+	// 		MINUS,
+	// 		IntNode_New(8)));
+
+	// Print(node);
 
 	return 0;
 }

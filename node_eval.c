@@ -4,11 +4,13 @@
 
 void (*IntNode_Vtable[])() = {
 	&IntNode_Delete,
-	&IntNode_Evaluate
+	&IntNode_Evaluate,
+	&IntNode_Print
 };
 void (*OperatorNode_Vtable[])() = {
 	&OperatorNode_Delete,
-	&OperatorNode_Evaluate
+	&OperatorNode_Evaluate,
+	&OperatorNode_Print
 };
 
 
@@ -80,4 +82,24 @@ int OperatorNode_Evaluate(OperatorNode *self) {
 		return 0;
 		break;
 	}
+}
+
+void IntNode_Print(IntNode *self) {
+	printf("%d ", self->value);
+}
+
+static const char *operators[] = {
+	"+", "-", "*", "/"
+};
+
+void OperatorNode_Print(OperatorNode *self) {
+	printf("( ");
+	Print(self->left);
+	printf("%s ", operators[self->operator]);
+	Print(self->right);
+	printf(") ");
+}
+
+void Print(Node *self) {
+	self->vtable[Call_Print](self);
 }

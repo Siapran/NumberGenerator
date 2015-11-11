@@ -12,6 +12,7 @@ typedef struct IntNode
 IntNode *IntNode_New(int value);
 void IntNode_Delete(IntNode *self);
 int IntNode_Evaluate(IntNode *self);
+void IntNode_Print(IntNode *self);
 
 typedef enum Operator
 {
@@ -29,8 +30,9 @@ typedef struct OperatorNode
 OperatorNode *OperatorNode_New(Node *left, Operator operator, Node *right);
 void OperatorNode_Delete(OperatorNode *self);
 int OperatorNode_Evaluate(OperatorNode *self);
+void OperatorNode_Print(OperatorNode *self);
 
-enum {Call_Delete = 0, Call_Evaluate};
+enum {Call_Delete = 0, Call_Evaluate, Call_Print};
 extern void (*IntNode_Vtable[])();
 extern void (*OperatorNode_Vtable[])();
 void Delete(Node *self);
@@ -43,3 +45,5 @@ enum {
 };
 typedef int (*Evaluate_Function)(Node *self);
 int Evaluate(Node *self);
+
+void Print(Node *self);
