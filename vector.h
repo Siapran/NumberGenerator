@@ -12,4 +12,4 @@ void Vector_Resize(Vector *self, size_t size);
 int Vector_Get(Vector *self, size_t index);
 void Vector_Set(Vector *self, size_t index, int value);
 
-Vector *Vector_Get_Subvector(Vector *self, size_t start, size_t end);
+Vector Vector_Get_Subvector(Vector *self, size_t start, size_t end);

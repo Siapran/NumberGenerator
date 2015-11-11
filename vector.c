@@ -64,6 +64,10 @@ void Vector_Set(Vector *self, size_t index, int value) {
 	self->data[index] = value;
 }
 
-Vector *Vector_Get_Subvector(Vector *self, size_t start, size_t end) {
-	
+Vector Vector_Get_Subvector(Vector *self, size_t start, size_t end) {
+	return {
+		.data = self->data + start,
+		.size = end - start,
+		.capacity = -1;
+	}
 }

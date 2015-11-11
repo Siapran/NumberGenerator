@@ -56,7 +56,7 @@ List_Node *getOpTrees(Vector *values) {
 		return List_New_node(NULL, IntNode_New(values->data[0]));
 	}
 	for (index = 1; index < values->size; ++index) {
-
+		
 	}
 }
 
