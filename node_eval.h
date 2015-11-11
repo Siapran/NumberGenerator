@@ -37,7 +37,7 @@ extern void (*IntNode_Vtable[])();
 extern void (*OperatorNode_Vtable[])();
 void Delete(Node *self);
 
-static int Evaluation_Error = 0;
+static int Evaluation_Error;
 enum {
 	NOT_A_DIVIDER = 1,
 	DIVIDE_BY_ZERO = 2,

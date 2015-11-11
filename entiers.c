@@ -45,8 +45,8 @@ List_Node *get_all_trees(Vector *values) {
 
 	List_Node
 	*root = NULL, *head = NULL,
-	*leftTree_root, *leftTree_head,
-	*rightTree_root, *rightTree_head;
+	 *leftTree_root, *leftTree_head,
+	 *rightTree_root, *rightTree_head;
 
 	Node *node;
 	Operator op;
@@ -87,6 +87,7 @@ List_Node *get_all_trees(Vector *values) {
 int main()
 {
 	size_t i, size;
+	int result;
 	Vector *input;
 	List_Node *root, *head;
 
@@ -98,21 +99,18 @@ int main()
 	}
 
 	root = get_all_trees(input);
-
-	Print(root->node);
-
-	// Node *node = OperatorNode_New(
-	// 	OperatorNode_New(
-	// 		IntNode_New(5),
-	// 		PLUS,
-	// 		IntNode_New(6)),
-	// 	DIVIDE,
-	// 	OperatorNode_New(
-	// 		IntNode_New(7),
-	// 		MINUS,
-	// 		IntNode_New(8)));
-
-	// Print(node);
+	foreach (head, root) {
+		Print(head->node);
+		Evaluation_Error = 0;
+		result = Evaluate(head->node);
+		printf("\t [%d]", Evaluation_Error);
+		if (result < 0 || Evaluation_Error != 0)
+		{
+			printf("\t -> NOT VALID\n");
+		} else {
+			printf("\t = %d\n", result);
+		}
+	}
 
 	return 0;
 }
