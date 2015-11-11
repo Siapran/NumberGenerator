@@ -3,8 +3,6 @@ typedef struct Node
 	void (**vtable)();
 } Node;
 
-int Evaluate(Node *self);
-
 typedef struct IntNode
 {
 	void (**vtable)();
@@ -33,8 +31,8 @@ void OperatorNode_Delete(OperatorNode *self);
 int OperatorNode_Evaluate(OperatorNode *self);
 
 enum {Call_Delete = 0, Call_Evaluate};
-void (*IntNode_Vtable[])();
-void (*OperatorNode_Vtable[])();
+extern void (*IntNode_Vtable[])();
+extern void (*OperatorNode_Vtable[])();
 void Delete(Node *self);
 
 static int Evaluation_Error = 0;
