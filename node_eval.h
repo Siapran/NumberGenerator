@@ -15,7 +15,7 @@ int IntNode_Evaluate(IntNode *self);
 
 typedef enum Operator
 {
-	PLUS, MINUS, TIMES, DIVIDE
+	PLUS, MINUS, TIMES, DIVIDE, OPERATOR_LAST
 } Operator;
 
 typedef struct OperatorNode

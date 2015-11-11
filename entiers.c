@@ -33,6 +33,15 @@ void List_Delete(List_Node *self) {
 	}
 }
 
+void List_Add(List_Node **root, List_Node **head, Node *node) {
+	if (*head == NULL)
+	{
+		*root = *head = List_New_node(NULL, node);
+	} else {
+		*head = List_New_node(*head, node);
+	}
+}
+
 #define foreach(head, root) for (head = root; head != NULL; head = head->next)
 
 void read_input() {
@@ -45,20 +54,11 @@ void read_input() {
 	}
 }
 
-List *get_all_trees() {
 
-}
-
-int main()
-{
-
-	return 0;
-}
-
-List_Node *getOpTrees(Vector *values) {
+List_Node *get_all_trees(Vector *values) {
 
 	List_Node
-	*root, *head,
+	*root = NULL, *head = NULL,
 	*leftTree_root, *leftTree_head,
 	*rightTree_root, *rightTree_head,;
 
@@ -70,20 +70,23 @@ List_Node *getOpTrees(Vector *values) {
 
 	if (values.size == 1)
 	{
-		return List_New_node(NULL, IntNode_New(values->data[0]));
+		List_Add(&root, &head, IntNode_New(values->data[0]));
+		List_Add(&root, &head, IntNode_New(-values->data[0]));
+		return root;
 	}
 
 	for (index = 1; index < values->size; ++index) {
 		leftlist = Vector_Get_Subvector(values, 0, index);
 		rightlist = Vector_Get_Subvector(values, index, values->size);
 
-		leftTree_root = getOpTrees(leftlist);
-		rightTree_root = getOpTrees(rightlist);
+		leftTree_root = get_all_trees(leftlist);
+		rightTree_root = get_all_trees(rightlist);
 
 		foreach (leftTree_head, leftTree_root) {
 			foreach (rightTree_head, rightTree_root) {
-				for (op = PLUS; op <= DIVIDE; ++op) {
+				for (op = PLUS; op < OPERATOR_LAST; ++op) {
 					node = OperatorNode_New(leftTree_head->node, op, rightTree_head->node);
+					List_Add(&root, &head, node);
 				}
 			}
 		}
@@ -91,4 +94,12 @@ List_Node *getOpTrees(Vector *values) {
 		List_Delete(leftTree_root);
 		List_Delete(rightTree_root);
 	}
+
+	return root;
+}
+
+int main()
+{
+
+	return 0;
 }
