@@ -53,7 +53,7 @@ IntNode *IntNode_New(int value) {
 	return self;
 }
 
-OperatorNode *OperatorNode_New(Node *left, Node *right, Operator operator) {
+OperatorNode *OperatorNode_New(Node *left, Operator operator, Node *right) {
 	OperatorNode *self = malloc(sizeof(*self));
 	self->vtable = OperatorNode_Vtable;
 	self->left = left;
@@ -129,6 +129,14 @@ int OperatorNode_Evaluate(OperatorNode *self) {
 
 int main(int argc, char const *argv[])
 {
-	
+	Node *node =
+		OperatorNode_New(
+			IntNode_New(32),
+			PLUS,
+			OperatorNode_New(
+				IntNode_New(8),
+				PLUS,
+				IntNode_New(2)));
+	printf("%d\n", Evaluate(node));
 	return 0;
 }
