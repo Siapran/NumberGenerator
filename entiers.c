@@ -20,10 +20,10 @@ typedef struct IntNode
 void IntNode_Delete(IntNode *self);
 int IntNode_Evaluate(IntNode *self);
 
-enum Operator
+typedef enum Operator
 {
 	PLUS, MINUS, TIMES, DIVIDE
-};
+} Operator;
 
 typedef struct OperatorNode
 {
@@ -83,8 +83,10 @@ enum {
 	UNKNOWN_OPERATOR = 4,
 };
 
+typedef int (*Evaluate_Function)(Node *self);
+
 int Evaluate(Node *self) {
-	return self->vtable[Call_Evaluate](self);
+	return ((Evaluate_Function) self->vtable[Call_Evaluate])(self);
 }
 
 int IntNode_Evaluate(IntNode *self) {
