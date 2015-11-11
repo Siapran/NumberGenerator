@@ -36,14 +36,14 @@ typedef struct OperatorNode
 void OperatorNode_Delete(OperatorNode *self);
 int OperatorNode_Evaluate(OperatorNode *self);
 
-
 enum {Call_Delete = 0, Call_Evaluate};
 void (*IntNode_Vtable[])() = {
 	&IntNode_Delete,
 	&IntNode_Evaluate
 };
 void (*OperatorNode_Vtable[])() = {
-
+	&OperatorNode_Delete,
+	&OperatorNode_Evaluate
 };
 
 IntNode *IntNode_New(int value) {
@@ -75,7 +75,6 @@ void OperatorNode_Delete(OperatorNode *self) {
 	Delete(self->right);
 	free(self);
 }
-
 
 static int Evaluation_Error = 0;
 enum {
@@ -124,4 +123,10 @@ int OperatorNode_Evaluate(OperatorNode *self) {
 		return 0;
 		break;
 	}
+}
+
+int main(int argc, char const *argv[])
+{
+	
+	return 0;
 }
