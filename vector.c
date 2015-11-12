@@ -80,3 +80,8 @@ int *Vector_At(Vector *self, size_t index) {
 	}
 	return &self->data[index];
 }
+
+void Vector_Push(Vector *self, int value) {
+	Vector_Resize(self, self->size + 1);
+	self->data[self->size - 1] = value;
+}

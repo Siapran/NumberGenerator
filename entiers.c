@@ -14,8 +14,8 @@ Vector *get_all_trees(Vector *values) {
 
 	if (values->size == 1)
 	{
-		Vector_Set(results, results->size, values->data[0]);
-		Vector_Set(results, results->size, -values->data[0]);
+		Vector_Push(results, values->data[0]);
+		Vector_Push(results, -values->data[0]);
 		return results;
 	}
 
@@ -29,12 +29,12 @@ Vector *get_all_trees(Vector *values) {
 
 		foreach (i, leftresults) {
 			foreach (j, rightresults) {
-				
-				Vector_Set(results, results->size, leftresults->data[i] + rightresults->data[j]);
-				Vector_Set(results, results->size, leftresults->data[i] - rightresults->data[j]);
-				Vector_Set(results, results->size, leftresults->data[i] * rightresults->data[j]);
-				if (rightresults->data[j] == 0 || leftresults->data[i] % rightresults->data[j] != 0) break;
-				Vector_Set(results, results->size, leftresults->data[i] / rightresults->data[j]);
+
+				Vector_Push(results, leftresults->data[i] + rightresults->data[j]);
+				Vector_Push(results, leftresults->data[i] - rightresults->data[j]);
+				Vector_Push(results, leftresults->data[i] * rightresults->data[j]);
+				if ( rightresults->data[j] == 0 /*|| leftresults->data[i] % rightresults->data[j] != 0*/ ) { break; }
+				Vector_Push(results, leftresults->data[i] / rightresults->data[j]);
 			}
 		}
 
@@ -53,6 +53,7 @@ int main()
 	int result;
 	Vector *input;
 	Vector *results;
+	Vector *indexer;
 
 	scanf("%u", &size);
 	input = Vector_New(size);
@@ -61,22 +62,27 @@ int main()
 		scanf("%d", &input->data[i]);
 	}
 
-	results = Vector_New(8);
-
 	results = get_all_trees(input);
+	indexer = Vector_New(0);
 
 	foreach (i, results) {
-		printf("%d\n", results->data[i]);
-	}
-
-	i = 0;
-
-	while (Vector_Get(results, i) != 0) {
-		++i;
+		if (results->data[i] >= 0) {
+			printf("%d\n", results->data[i]);
+			Vector_Set(indexer, results->data[i], 1);
+		}
 	}
 
 	Vector_Delete(results);
 
+	i = 0;
+
+	while (Vector_Get(indexer, i) != 0) {
+		++i;
+	}
+
+	printf("%d\n", i);
+
+	Vector_Delete(indexer);
 
 	return 0;
 }
