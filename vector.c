@@ -72,3 +72,11 @@ Vector Vector_Get_Subvector(Vector *self, size_t start, size_t end) {
 	};
 	return res;
 }
+
+int *Vector_At(Vector *self, size_t index) {
+	if (index >= self->size)
+	{
+		Vector_Resize(self, index + 1);
+	}
+	return &self->data[index];
+}

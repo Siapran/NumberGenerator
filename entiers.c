@@ -1,87 +1,50 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "node_eval.h"
 #include "vector.h"
 
-typedef struct List_Node
-{
-	Node *node;
-	struct List_Node *next;
-} List_Node;
+Vector *get_all_trees(Vector *values) {
 
-
-List_Node *List_New_node(List_Node *prev, Node *node) {
-	List_Node *self = malloc(sizeof(*self));
-	self->node = node;
-	self->next = NULL;
-	if (prev != NULL)
-	{
-		prev->next = self;
-	}
-	return self;
-}
-
-void List_Delete(List_Node *self) {
-	List_Node *old_self;
-	while (self != NULL) {
-		old_self = self;
-		self = self->next;
-		free(old_self);
-	}
-}
-
-void List_Add(List_Node **root, List_Node **head, Node *node) {
-	if (*head == NULL)
-	{
-		*root = *head = List_New_node(NULL, node);
-	} else {
-		*head = List_New_node(*head, node);
-	}
-}
-
-#define foreach(head, root) for (head = root; head != NULL; head = head->next)
-
-List_Node *get_all_trees(Vector *values) {
-
-	List_Node
-	*root = NULL, *head = NULL,
-	 *leftTree_root, *leftTree_head,
-	 *rightTree_root, *rightTree_head;
-
-	Node *node;
-	Operator op;
+	Vector *results;
+	Vector *leftresults, *rightresults;
 
 	size_t index, i, j;
 	Vector leftlist, rightlist;
 
+	results = Vector_New(0);
+
 	if (values->size == 1)
 	{
-		List_Add(&root, &head, IntNode_New(values->data[0]));
-		List_Add(&root, &head, IntNode_New(-values->data[0]));
-		return root;
+		Vector_Set(results, results->size, values->data[0]);
+		Vector_Set(results, results->size, -values->data[0]);
+		return results;
 	}
+
 
 	for (index = 1; index < values->size; ++index) {
 		leftlist = Vector_Get_Subvector(values, 0, index);
 		rightlist = Vector_Get_Subvector(values, index, values->size);
 
-		leftTree_root = get_all_trees(&leftlist);
-		rightTree_root = get_all_trees(&rightlist);
+		leftresults = get_all_trees(&leftlist);
+		rightresults = get_all_trees(&rightlist);
 
-		foreach (leftTree_head, leftTree_root) {
-			foreach (rightTree_head, rightTree_root) {
-				for (op = PLUS; op < OPERATOR_LAST; ++op) {
-					node = OperatorNode_New(leftTree_head->node, op, rightTree_head->node);
-					List_Add(&root, &head, node);
-				}
+		foreach (i, leftresults) {
+			foreach (j, rightresults) {
+				
+				Vector_Set(results, results->size, leftresults->data[i] + rightresults->data[j]);
+				Vector_Set(results, results->size, leftresults->data[i] - rightresults->data[j]);
+				Vector_Set(results, results->size, leftresults->data[i] * rightresults->data[j]);
+				if (rightresults->data[j] == 0 || leftresults->data[i] % rightresults->data[j] != 0) break;
+				Vector_Set(results, results->size, leftresults->data[i] / rightresults->data[j]);
 			}
 		}
 
-		List_Delete(leftTree_root);
-		List_Delete(rightTree_root);
+		Vector_Delete(leftresults);
+		Vector_Delete(rightresults);
 	}
 
-	return root;
+
+
+	return results;
 }
 
 int main()
@@ -90,7 +53,6 @@ int main()
 	int result;
 	Vector *input;
 	Vector *results;
-	List_Node *root, *head;
 
 	scanf("%u", &size);
 	input = Vector_New(size);
@@ -101,31 +63,11 @@ int main()
 
 	results = Vector_New(8);
 
-	root = get_all_trees(input);
+	results = get_all_trees(input);
 
-	// foreach (head, root) {
-	// 	Print(head->node);
-	// 	Evaluation_Error = 0;
-	// 	result = Evaluate(head->node);
-	// 	printf("\t [%d]", Evaluation_Error);
-	// 	if (result < 0 || Evaluation_Error != 0)
-	// 	{
-	// 		printf("\t -> NOT VALID\n");
-	// 	} else {
-	// 		printf("\t = %d\n", result);
-	// 	}
-	// }
-
-	foreach (head, root) {
-		Reset_Error();
-		result = Evaluate(head->node);
-		if (result >= 0 && Get_Error() == 0)
-		{
-			Vector_Set(results, result, Vector_Get(results, result) + 1);
-		}
-		// Delete(head->node);
+	foreach (i, results) {
+		printf("%d\n", results->data[i]);
 	}
-	// List_Delete(root);
 
 	i = 0;
 
@@ -133,7 +75,8 @@ int main()
 		++i;
 	}
 
-	printf("%d\n", i);
+	Vector_Delete(results);
+
 
 	return 0;
 }
